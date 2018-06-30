@@ -53,7 +53,7 @@ abstract class AbstractCommand extends Command
 
         // Process all provided models
         foreach ($this->getModelArgument() as $model) {
-            if ($model = $this->validateModel("{$this->models}\\{$model}")) {
+            if ($model = $this->validateModel($model)) {
 
                 // Get model instance
                 $instance = new $model();
@@ -110,6 +110,10 @@ abstract class AbstractCommand extends Command
             $model = array_map(function ($m) {
                 return Str::studly($m);
             }, explode('\\', $model));
+
+            if (!empty($model[0])) {
+                $model = array_merge([$this->models], $model);
+            }
 
             return implode('\\', $model);
         }, $models);
